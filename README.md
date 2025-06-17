@@ -2,10 +2,8 @@
 
 An intuitive web application built with **Flask** to manage clients and generate clean, printable **PDF invoices**. Easily customizable with your own business name, logo, and tax information.
 
-![Dashboard Screenshot](static/readme/client-detail.png)
-![Invoice Screenshot](static/readme/invoice.png)
-![Invoice Details Screenshot](static/readme/all-invoices.png)
-![Edit Company Details Screenshot](static/readme/edit-company.png)
+![Dashboard Screenshot](static/readme/client-detail.png) ![Invoice Screenshot](static/readme/invoice.png)
+![Invoice Details Screenshot](static/readme/all-invoices.png) ![Edit Company Details Screenshot](static/readme/edit-company.png)
 ![Edit Invoice Details Screenshot](static/readme/edit.png)
 
 ---
