@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Invoice #{{ invoice.id }}</title>
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #f9f9f9;
+        }
+
+        .invoice-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .company-info {
+            font-size: 14px;
+        }
+
+        .company-logo img {
+            max-width: 120px;
+        }
+
+        .invoice-info,
+        .client-info {
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background-color: #f1f1f1;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td:last-child,
+        table th:last-child {
+            text-align: right;
+        }
+
+        .total-row td {
+            font-weight: bold;
+            border-top: 2px solid #000;
+        }
+
+        .back-link,
+        .print-btn,
+        .pdf-btn {
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 10px;
+            text-decoration: none;
+            color: #fff;
+            background: #3498db;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .back-link:hover,
+        .print-btn:hover,
+        .pdf-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="invoice-box">
+        <div class="invoice-header">
+            <div class="company-header">
+                <img src="{{ company.logo }}" alt="Company Logo" style="height: 80px;">
+                <h2>{{ company.name }}</h2>
+                <p>{{ company.address }}<br>
+                Email: {{ company.email }} | Phone: {{ company.phone }} <br>
+                GSTIN: {{ company.gst }}</p>
+            </div>
+
+
+            <div class="invoice-info">
+                <h2>Invoice #{{ invoice.id }}</h2>
+                <p><strong>Date:</strong> {{ invoice.date }}</p>
+            </div>
+        </div>
+
+        <div class="client-info">
+            <h3>Bill To:</h3>
+            <p>{{ invoice.client.name }}<br>
+                {{ invoice.client.company }}<br>
+                {{ invoice.client.email }}<br>
+                {{ invoice.client.phone }}</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Rate (₹)</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice.items %}
+                <tr>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ "%.2f"|format(item.rate) }}</td>
+                    <td>{{ "%.2f"|format(item.amount) }}</td>
+                </tr>
+                {% endfor %}
+
+                <!-- GST Calculation -->
+                <tr>
+                    <td colspan="3">Subtotal</td>
+                    <td>₹{{ "%.2f"|format(invoice.total_amount) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">GST (18%)</td>
+                    <td>₹{{ "%.2f"|format(invoice.total_amount * 0.18) }}</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3">Total with GST</td>
+                    <td>₹{{ "%.2f"|format(invoice.total_amount * 1.18) }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="no-print">
+            <a class="back-link" href="{{ url_for('invoices') }}">← Back to Invoices</a>
+            <a class="print-btn" href="#" onclick="window.print()">Print</a>
+            <a class="pdf-btn" href="{{ url_for('download_invoice_pdf', invoice_id=invoice.id) }}">Download PDF</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

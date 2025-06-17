@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="/clients"><button class="btn btn-primary">Back</button></a>
+<br><br>
+<h2>Edit Company Info</h2>
+
+<form method="POST">
+    <div class="mb-3">
+        <label>Company Name</label>
+        <input name="name" class="form-control" value="{{ company.name }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Logo URL</label>
+        <input name="logo" class="form-control" value="{{ company.logo }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Address</label>
+        <input name="address" class="form-control" value="{{ company.address }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input name="email" class="form-control" value="{{ company.email }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Phone</label>
+        <input name="phone" class="form-control" value="{{ company.phone }}">
+    </div>
+
+    <div class="mb-3">
+        <label>GSTIN</label>
+        <input name="gst" class="form-control" value="{{ company.gst }}">
+    </div>
+
+    <button class="btn btn-primary">Save</button>
+</form>
+<br>
+
+{% endblock %}

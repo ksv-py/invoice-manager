@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Invoice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }
+
+        form {
+            max-width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h2, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        select,
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .item-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .item-row input {
+            flex: 1;
+        }
+
+        #items {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="button"] {
+            background-color: #27ae60;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        button[type="submit"] {
+            background-color: #2980b9;
+            color: #fff;
+            float: right;
+        }
+
+        .status-group {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function addItemRow() {
+            const row = document.createElement('div');
+            row.classList.add('item-row');
+            row.innerHTML = `
+                <input type="text" name="description" placeholder="Description" required>
+                <input type="number" name="quantity" placeholder="Qty" min="1" required>
+                <input type="number" name="rate" placeholder="Rate" step="0.01" min="0" required>
+            `;
+            document.getElementById('items').appendChild(row);
+        }
+    </script>
+</head>
+
+<body>
+    <form method="post">
+        <h2>Create New Invoice</h2>
+
+        <label>Client:</label>
+        <select name="client" required>
+            {% for client in clients %}
+                <option value="{{ client.id }}">{{ client.name }} - ({{ client.company }})</option>
+            {% endfor %}
+        </select>
+
+        <h3>Line Items</h3>
+        <div id="items">
+            <div class="item-row">
+                <input type="text" name="description" placeholder="Description" required>
+                <input type="number" name="quantity" placeholder="Qty" min="1" required>
+                <input type="number" name="rate" placeholder="Rate" step="0.01" min="0" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="addItemRow()">+ Add Item</button>
+
+        <div class="status-group">
+            <label for="status">Status:</label>
+            <select name="status" id="status" required>
+                <option value="Due">Due</option>
+                <option value="Paid">Paid</option>
+                <option value="Overdue">Overdue</option>
+            </select>
+        </div>
+
+        <br>
+        <button type="submit">Create Invoice</button>
+    </form>
+</body>
+
+</html>

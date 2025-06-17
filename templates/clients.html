@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Clients</h2>
+
+<!-- Top action buttons -->
+<div class="mb-3 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('new_invoice') }}" class="btn btn-success">+ New Invoice</a>
+    <a href="{{ url_for('invoices') }}" class="btn btn-primary">View All Invoices</a>
+    <a href="{{ url_for('edit_company') }}" class="btn btn-primary">Edit Company Info</a>
+</div>
+
+<!-- Client add form -->
+<form method="POST" class="mb-4">
+    <div class="row g-2">
+        <div class="col"><input name="name" class="form-control" placeholder="Name" required></div>
+        <div class="col"><input name="email" class="form-control" placeholder="Email" required></div>
+        <div class="col"><input name="phone" class="form-control" placeholder="Phone" required></div>
+        <div class="col"><input name="company" class="form-control" placeholder="Company"></div>
+        <div class="col-12 mt-2"><textarea name="notes" class="form-control" placeholder="Notes"></textarea></div>
+        <div class="col-12 mt-2"><button class="btn btn-outline-primary">Add Client</button></div>
+    </div>
+</form>
+
+<!-- Clients list -->
+<ul class="list-group">
+    {% for client in clients %}
+    <li class="list-group-item">
+        <strong>{{ client.name }}</strong> ({{ client.email }}) - {{ client.company }}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
