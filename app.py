@@ -203,5 +203,6 @@ def edit_company():
         }
 
     return render_template('edit_company.html', company=company_info)
-if __name__ == "__main__":
-    app.run(debug = True)
+
+# if __name__ == "__main__":
+#     app.run(debug = True)
