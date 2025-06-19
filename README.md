@@ -32,6 +32,8 @@ An intuitive web application built with **Flask** to manage clients and generate
 
 ```
 invoice-manager/
+├── instance/
+│  └──  database.db
 │
 ├── static/
 │ ├── logo.png
@@ -41,13 +43,13 @@ invoice-manager/
 │ ├── base.html
 │ ├── clients.html
 │ ├── invoices.html
+│ ├── edit_company.html
+│ ├── edit_invoice.html
+│ ├── new_invoice.html
 │ └── invoice_details.html
 │
-├── data/
-│ ├── clients.json
-│ ├── invoices.json
-│ └── company.json
-│
+├── company_info.json
+├── requirements.txt
 ├── app.py
 └── README.md
 ```
