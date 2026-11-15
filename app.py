@@ -1,11 +1,23 @@
 from flask import Flask, render_template, redirect, url_for, request, make_response, flash
 from models import db, Client, Invoice, InvoiceItems
 from datetime import datetime
-from weasyprint import HTML
 import json
+import os
+# NOTE: WeasyPrint is NOT imported here on purpose. It needs system libraries
+# (Pango/Cairo) that do not exist in Vercel's serverless Python runtime, so
+# the old top-level `from weasyprint import HTML` crashed the whole function
+# on every request (FUNCTION_INVOCATION_FAILED). It is now imported lazily
+# inside download_invoice_pdf() only. On Vercel that route will still fail -
+# use the Render/Docker deploy for working PDFs (see Dockerfile/render.yaml).
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+# Vercel's filesystem is read-only except /tmp: the old 'sqlite:///database.db'
+# made db.create_all() fail at import time on Vercel. On Vercel use /tmp
+# (data does not persist between invocations); on Render/local keep the file DB.
+if os.environ.get('VERCEL'):
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/database.db'
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'abcd'
 
@@ -156,6 +168,9 @@ def delete_invoice(invoice_id):
 
 @app.route('/invoices/<int:invoice_id>/download')
 def download_invoice_pdf(invoice_id):
+    # Lazy import: WeasyPrint needs Pango/Cairo system libs. Importing it at
+    # module level crashed the app on Vercel (no such libs there).
+    from weasyprint import HTML
     invoice = Invoice.query.get_or_404(invoice_id)
     rendered = render_template('invoice_details.html', invoice=invoice, company = get_company_info())
     pdf = HTML(string=rendered).write_pdf()

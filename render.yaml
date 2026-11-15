@@ -1,7 +1,11 @@
+# Render deploy config for the Invoice Manager.
+# env: docker (not python) - WeasyPrint's system libraries (Pango/Cairo) can
+# only be installed via the Dockerfile; Render's native Python environment
+# ignores apt.txt, and the old native config therefore could not run PDFs.
 services:
   - type: web
     name: invoice-manager
-    env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    env: docker
+    dockerfilePath: ./Dockerfile
     plan: free
+    healthCheckPath: /
